@@ -208,7 +208,11 @@ export default {
     rangeSeparator: {
       default: ' - '
     },
-    pickerOptions: {}
+    pickerOptions: {},
+    defaultDate: {
+      type: Date,
+      default: () => new Date()
+    }
   },
 
   components: { ElInput },
@@ -410,7 +414,12 @@ export default {
       if (this.$isServer) return;
       if (!this.picker) {
         this.panel.defaultValue = this.currentValue;
-        this.picker = new Vue(this.panel).$mount();
+        const Panel = Vue.extend(this.panel);
+        this.picker = new Panel({
+          propsData: {
+            defaultDate: this.defaultDate
+          }
+        }).$mount();
         this.picker.popperClass = this.popperClass;
         this.popperElm = this.picker.$el;
         this.picker.width = this.reference.getBoundingClientRect().width;

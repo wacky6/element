@@ -187,7 +187,7 @@
 
     methods: {
       handleClear() {
-        this.date = new Date();
+        this.date = new Date(this.defaultDate);
         this.$emit('pick');
       },
 
@@ -353,11 +353,18 @@
       }
     },
 
+    props: {
+      defaultDate: {
+        type: Date,
+        default: () => new Date()
+      }
+    },
+
     data() {
       return {
         popperClass: '',
         pickerWidth: 0,
-        date: new Date(),
+        date: new Date(this.defaultDate),
         value: '',
         showTime: false,
         selectionMode: 'day',
