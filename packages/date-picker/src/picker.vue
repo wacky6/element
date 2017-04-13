@@ -209,10 +209,7 @@ export default {
       default: ' - '
     },
     pickerOptions: {},
-    defaultDate: {
-      type: Date,
-      default: () => new Date()
-    }
+    defaultValue: {}
   },
 
   components: { ElInput },
@@ -414,10 +411,9 @@ export default {
       if (this.$isServer) return;
       if (!this.picker) {
         this.panel.defaultValue = this.currentValue;
-        const Panel = Vue.extend(this.panel);
-        this.picker = new Panel({
+        this.picker = new (Vue.extend(this.panel))({
           propsData: {
-            defaultDate: this.defaultDate
+            defaultValue: this.defaultValue
           }
         }).$mount();
         this.picker.popperClass = this.popperClass;

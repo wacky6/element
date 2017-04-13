@@ -113,7 +113,7 @@
       type="date"
       placeholder="选择日期"
       :picker-options="pickerOptions0"
-      :default-date="new Date('2017-07-01')">
+      :default-value="'2017-07-01'">
     </el-date-picker>
   </div>
   <div class="block">
