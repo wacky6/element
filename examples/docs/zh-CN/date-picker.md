@@ -112,7 +112,8 @@
       v-model="value1"
       type="date"
       placeholder="选择日期"
-      :picker-options="pickerOptions0">
+      :picker-options="pickerOptions0"
+      default-value="2017-07-01">
     </el-date-picker>
   </div>
   <div class="block">
