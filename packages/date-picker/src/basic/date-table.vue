@@ -147,7 +147,8 @@
             }
 
             if (i >= 0 && i <= 1) {
-              if (j + i * 7 >= (day + offset)) {
+              const cellOffsetOfMonth = (day - this.firstDayOfWeek + 7) % 7;
+              if (j + i * 7 >= cellOffsetOfMonth) {
                 cell.text = count++;
                 if (count === 2) {
                   firstDayPosition = i * 7 + j;

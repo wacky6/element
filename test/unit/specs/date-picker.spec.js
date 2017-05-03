@@ -720,11 +720,11 @@ describe('DatePicker', () => {
     setTimeout(_ => {
       const prevMonthLen = vm.picker.$el.querySelectorAll('.prev-month').length;
       const firstWeek = vm.picker.$el.querySelector('tr th');
-      const offset = i > 3 ? 7 - i : -i;
       const day = FirstDayOfCurrentMonth === 0 ? 7 : FirstDayOfCurrentMonth;
+      const cellOffsetOfMonth = (day - i + 7) % 7;
 
       expect(firstWeek.innerText).to.equal(chineseWeek[i - 1]);
-      expect(prevMonthLen - day).to.equal(offset);
+      expect(prevMonthLen).to.equal(cellOffsetOfMonth);
       done();
     });
   });
