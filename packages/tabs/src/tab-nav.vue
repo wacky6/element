@@ -23,7 +23,8 @@
         type: Function,
         default: noop
       },
-      type: String
+      type: String,
+      stretch: Boolean
     },
 
     data() {
@@ -169,7 +170,14 @@
         <div class={['el-tabs__nav-wrap', scrollable ? 'is-scrollable' : '']}>
           {scrollBtn}
           <div class={['el-tabs__nav-scroll']} ref="navScroll">
-            <div class="el-tabs__nav" ref="nav" style={navStyle}>
+            <div
+              class={{
+                'el-tabs__nav': true,
+                'stretch': this.stretch
+              }}
+              ref="nav"
+              style={navStyle}
+            >
               {!type ? <tab-bar tabs={panes}></tab-bar> : null}
               {tabs}
             </div>

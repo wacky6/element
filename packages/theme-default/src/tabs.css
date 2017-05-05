@@ -71,6 +71,18 @@
       position: relative;
       transition: transform .3s;
       float: left;
+      &.stretch {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        min-width: 100%;
+        & > * {
+          flex-grow: 1;
+          flex-shrink: 0;
+          text-align: center;
+        }
+      }
     }
     @e item {
       padding: 0 16px;

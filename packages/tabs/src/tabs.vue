@@ -14,7 +14,8 @@
       closable: Boolean,
       addable: Boolean,
       value: {},
-      editable: Boolean
+      editable: Boolean,
+      stretch: Boolean
     },
 
     data() {
@@ -81,7 +82,8 @@
         currentName,
         panes,
         editable,
-        addable
+        addable,
+        stretch
       } = this;
 
       const newButton = editable || addable
@@ -102,7 +104,8 @@
           onTabRemove: handleTabRemove,
           editable,
           type,
-          panes
+          panes,
+          stretch
         },
         ref: 'nav'
       };
