@@ -94,6 +94,44 @@
         } else {
           this.$emit('activeItemChange', this.activeValue);
         }
+      },
+      scrollMenu(menu) {
+        const selected = menu.getElementsByClassName('is-active')[0];
+        if (!selected) {
+          menu.scrollTop = 0;
+          return;
+        }
+        // NOTE: getBoundingClientRect() does not work on transition-enter
+        //       calculate scrollTop related stuff manually
+        let top = 0;
+        let bottom = 0;
+        const items = menu.getElementsByClassName('el-cascader-menu__item');
+        for (let i = 0, length = items.length; i !== length; ++i) {
+          if (items[i] === selected) {
+            bottom += items[i].scrollHeight;
+            break;
+          } else {
+            top += items[i].scrollHeight;
+            bottom += items[i].scrollHeight;
+          }
+        }
+        const menuRectTop = menu.scrollTop;
+        const menuRectBottom = menuRectTop + menu.clientHeight;
+        if (top < menuRectTop) {
+          menu.scrollTop = top;
+        } else if (bottom > menuRectBottom) {
+          menu.scrollTop = bottom - menu.clientHeight;
+        }
+      },
+      handleMenuEnter() {
+        this.$nextTick(() => this.getMenus().forEach(menu => this.scrollMenu(menu)));
+      },
+      getMenus() {
+        if (this.$refs.wrapper) {
+          return Array.prototype.slice.call(this.$refs.wrapper.getElementsByClassName('el-cascader-menu'));
+        } else {
+          return [];
+        }
       }
     },
 
@@ -121,9 +159,19 @@
                 click: 'click',
                 hover: 'mouseenter'
               }[expandTrigger];
-              events.on[triggerEvent] = () => { this.activeItem(item, menuIndex); };
+              events.on[triggerEvent] = () => {
+                this.activeItem(item, menuIndex);
+                this.$nextTick(() => {
+                  // adjust self and next level
+                  this.scrollMenu(this.getMenus()[menuIndex]);
+                  this.scrollMenu(this.getMenus()[menuIndex + 1]);
+                });
+              };
             } else {
-              events.on.click = () => { this.select(item, menuIndex); };
+              events.on.click = () => {
+                this.select(item, menuIndex);
+                this.$nextTick(() => this.scrollMenu(this.getMenus()[menuIndex]));
+              };
             }
           }
 
@@ -158,13 +206,14 @@
         );
       });
       return (
-        <transition name="el-zoom-in-top" on-after-leave={this.handleMenuLeave}>
+        <transition name="el-zoom-in-top" on-before-enter={this.handleMenuEnter} on-after-leave={this.handleMenuLeave}>
           <div
             v-show={visible}
             class={[
               'el-cascader-menus',
               popperClass
             ]}
+            ref="wrapper"
           >
             {menus}
           </div>
