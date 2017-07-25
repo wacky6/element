@@ -63,7 +63,7 @@
 
       parent() {
         let result = this.$parent;
-        while (!result.isSelect) {
+        while (result.$options && result.$options.name !== 'ElSelect') {
           result = result.$parent;
         }
         return result;

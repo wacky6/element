@@ -209,7 +209,6 @@
         createdLabel: null,
         createdSelected: false,
         selected: this.multiple ? [] : {},
-        isSelect: true,
         inputLength: 20,
         inputWidth: 0,
         cachedPlaceHolder: '',
