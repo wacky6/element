@@ -85,6 +85,10 @@
         } else {
           return false;
         }
+      },
+
+      isHover() {
+        return this.$parent.options[this.$parent.hoverIndex] === this;
       }
     },
 
@@ -141,12 +145,6 @@
         if (!this.visible) {
           this.parent.filteredOptionsCount--;
         }
-      },
-
-      resetIndex() {
-        this.$nextTick(() => {
-          this.index = this.parent.options.indexOf(this);
-        });
       }
     },
 
@@ -159,7 +157,6 @@
 
       this.$on('queryChange', this.queryChange);
       this.$on('handleGroupDisabled', this.handleGroupDisabled);
-      this.$on('resetIndex', this.resetIndex);
     },
 
     beforeDestroy() {

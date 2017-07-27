@@ -259,7 +259,6 @@
         if (this.remote && typeof this.remoteMethod === 'function') {
           this.hoverIndex = -1;
           this.remoteMethod(val);
-          this.broadcast('ElOption', 'resetIndex');
         } else if (typeof this.filterMethod === 'function') {
           this.filterMethod(val);
           this.broadcast('ElOptionGroup', 'queryChange');
@@ -625,7 +624,6 @@
         if (index > -1) {
           this.options.splice(index, 1);
         }
-        this.broadcast('ElOption', 'resetIndex');
       },
 
       resetInputWidth() {
