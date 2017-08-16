@@ -260,7 +260,6 @@
         if (this.remote && typeof this.remoteMethod === 'function') {
           this.hoverIndex = -1;
           this.remoteMethod(val);
-          this.broadcast('ElOption', 'resetIndex');
         } else if (typeof this.filterMethod === 'function') {
           this.filterMethod(val);
           this.broadcast('ElOptionGroup', 'queryChange');
@@ -620,16 +619,6 @@
         }
       },
 
-      onOptionDestroy(option) {
-        this.optionsCount--;
-        this.filteredOptionsCount--;
-        let index = this.options.indexOf(option);
-        if (index > -1) {
-          this.options.splice(index, 1);
-        }
-        this.broadcast('ElOption', 'resetIndex');
-      },
-
       resetInputWidth() {
         this.inputWidth = this.$refs.reference.$el.getBoundingClientRect().width;
       },
@@ -684,7 +673,6 @@
       });
 
       this.$on('handleOptionClick', this.handleOptionSelect);
-      this.$on('onOptionDestroy', this.onOptionDestroy);
       this.$on('setSelected', this.setSelected);
     },
 

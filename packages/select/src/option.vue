@@ -7,7 +7,7 @@
     :class="{
       'selected': itemSelected,
       'is-disabled': disabled || groupDisabled || limitReached,
-      'hover': parent.hoverIndex === index
+      'hover': selfIsHovered()
     }">
     <slot>
       <span>{{ currentLabel }}</span>
@@ -97,6 +97,10 @@
     },
 
     methods: {
+      selfIsHovered() {
+        return this === this.parent.options[this.parent.hoverItem];
+      },
+
       isEqual(a, b) {
         if (!this.isObject) {
           return a === b;
@@ -140,12 +144,6 @@
         if (!this.visible) {
           this.parent.filteredOptionsCount--;
         }
-      },
-
-      resetIndex() {
-        this.$nextTick(() => {
-          this.index = this.parent.options.indexOf(this);
-        });
       }
     },
 
@@ -154,15 +152,20 @@
       this.parent.cachedOptions.push(this);
       this.parent.optionsCount++;
       this.parent.filteredOptionsCount++;
-      this.index = this.parent.options.indexOf(this);
 
       this.$on('queryChange', this.queryChange);
       this.$on('handleGroupDisabled', this.handleGroupDisabled);
-      this.$on('resetIndex', this.resetIndex);
     },
 
     beforeDestroy() {
-      this.dispatch('ElSelect', 'onOptionDestroy', this);
+      if (this.parent) {
+        this.parent.optionsCount--;
+        this.parent.filteredOptionsCount--;
+        let index = this.parent.options.indexOf(this);
+        if (index > -1) {
+          this.parent.options.splice(index, 1);
+        }
+      }
     }
   };
 </script>
