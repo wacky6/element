@@ -84,7 +84,7 @@
         }
 
         style.disabled = flag;
-        style.current = Number(this.year) === year;
+        style.current = Number(this.date.getFullYear()) === year;
 
         return style;
       },
