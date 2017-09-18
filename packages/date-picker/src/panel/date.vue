@@ -101,6 +101,7 @@
             </year-table>
             <month-table
               :month="month"
+              :year="year"
               :date="date"
               v-show="currentView === 'month'"
               @pick="handleMonthPick"

@@ -57,6 +57,9 @@
       date: {},
       month: {
         type: Number
+      },
+      year: {
+        type: Number
       }
     },
     mixins: [Locale],
@@ -87,7 +90,7 @@
         }
 
         style.disabled = flag;
-        style.current = this.month === month;
+        style.current = this.year === year && this.month === month;
 
         return style;
       },
