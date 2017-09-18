@@ -302,7 +302,7 @@
 
         newDate.setDate(parseInt(cell.text, 10));
 
-        return getWeekNumber(newDate) === this.week;
+        return this.year === this.date.getFullYear() && getWeekNumber(newDate) === this.week;
       },
 
       markRange(maxDate) {
