@@ -189,7 +189,7 @@
 
     methods: {
       handleClear() {
-        this.date = this.$options.defaultValue ? new Date(this.$options.defaultValue) : new Date();
+        this.date = this.defaultValue ? new Date(this.defaultValue) : new Date();
         this.$emit('pick');
       },
 
@@ -350,6 +350,9 @@
     },
 
     mounted() {
+      if (this.defaultValue) {
+        this.date = new Date(this.defaultValue);
+      }
       if (this.date && !this.year) {
         this.year = this.date.getFullYear();
         this.month = this.date.getMonth();
@@ -360,7 +363,8 @@
       return {
         popperClass: '',
         pickerWidth: 0,
-        date: this.$options.defaultValue ? new Date(this.$options.defaultValue) : new Date(),
+        date: new Date(),
+        defaultValue: null,
         value: '',
         showTime: false,
         selectionMode: 'day',

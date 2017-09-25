@@ -248,6 +248,7 @@ export default {
     currentValue(val) {
       if (val) return;
       if (this.picker && typeof this.picker.handleClear === 'function') {
+        console.log('handleClear');
         this.picker.handleClear();
       } else {
         this.$emit('input');
@@ -262,6 +263,12 @@ export default {
     displayValue(val) {
       this.$emit('change', val);
       this.dispatch('ElFormItem', 'el.form.change');
+    },
+    defaultValue(val) {
+      // NOTE: should eventually move to jsx style picker + panel ?
+      if (this.panel) {
+        this.panel.defaultValue = val;
+      }
     }
   },
 
@@ -368,7 +375,7 @@ export default {
     handleClickIcon() {
       if (this.readonly || this.disabled) return;
       if (this.showClose) {
-        this.currentValue = this.$options.defaultValue || '';
+        this.currentValue = '';
         this.showClose = false;
       } else {
         this.pickerVisible = !this.pickerVisible;
@@ -446,9 +453,11 @@ export default {
     },
 
     mountPicker() {
-      this.panel.defaultValue = this.defaultValue || this.currentValue;
-      this.picker = new Vue(this.panel).$mount();
+      this.panel.defaultValue = this.defaultValue || this.currentValue;  // kept for legacy panels
+      this.picker = new Vue(this.panel);
       this.picker.popperClass = this.popperClass;
+      this.picker.defaultValue = this.defaultValue;
+      this.picker.$mount();
       this.popperElm = this.picker.$el;
       this.picker.width = this.reference.getBoundingClientRect().width;
       this.picker.showTime = this.type === 'datetime' || this.type === 'datetimerange';
