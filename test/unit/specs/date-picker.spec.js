@@ -2,7 +2,8 @@ import {
   createTest,
   createVue,
   destroyVM,
-  triggerEvent
+  triggerEvent,
+  sleep
 } from '../util';
 import DatePicker from 'packages/date-picker';
 
@@ -239,7 +240,7 @@ describe('DatePicker', () => {
       destroyVM(vm);
     });
 
-    it('works for type=date', done => {
+    it('works for type=date', async () => {
       let emitted = false;
       vm = createVue({
         template: `
@@ -267,26 +268,21 @@ describe('DatePicker', () => {
       input.blur();
       input.focus();
 
-      setTimeout(_ => {
-        const picker = vm.$refs.compo.picker;
+      await sleep(DELAY);
+      const picker = vm.$refs.compo.picker;
+      picker.$el.querySelector('td.available').click();
 
-        picker.$el.querySelector('td.available').click();
-        setTimeout(_ => {
-          expect(emitted).to.true;
-          emitted = false;
+      await sleep(DELAY);
+      expect(emitted).to.true;
+      emitted = false;
 
-          setTimeout(_ => {
-            input.blur();
-            input.focus();
+      await sleep(DELAY);
+      input.blur();
+      input.focus();
 
-            picker.$el.querySelector('td.available').click();
-            setTimeout(_ => {
-              expect(emitted).to.false;
-              done();
-            }, DELAY);
-          }, DELAY);
-        }, DELAY);
-      }, DELAY);
+      await sleep(DELAY);
+      picker.$el.querySelector('td.available').click();
+      expect(emitted).to.false;
     });
 
     it('works for type=daterange', done => {

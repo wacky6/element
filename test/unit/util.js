@@ -94,3 +94,7 @@ exports.triggerClick = function(elm, ...opts) {
 
   return elm;
 };
+
+exports.sleep = function(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
