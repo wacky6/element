@@ -145,6 +145,11 @@
     },
 
     methods: {
+      getInputElement() {
+        // hack for https://github.com/ElemeFE/element/issues/8269
+        // should let el-input support format validation somwhow ??
+        return this.$refs.input.$el.querySelector('input, textarea');
+      },
       handleComposition(event) {
         if (event.type === 'compositionend') {
           setTimeout(() => {
@@ -216,7 +221,7 @@
           var inputPattern = this.inputPattern;
           if (inputPattern && !inputPattern.test(this.inputValue || '')) {
             this.editorErrorMessage = this.inputErrorMessage || t('el.messagebox.error');
-            addClass(this.$refs.input.$el.querySelector('input'), 'invalid');
+            addClass(this.getInputElement(), 'invalid');
             return false;
           }
           var inputValidator = this.inputValidator;
@@ -224,7 +229,7 @@
             var validateResult = inputValidator(this.inputValue);
             if (validateResult === false) {
               this.editorErrorMessage = this.inputErrorMessage || t('el.messagebox.error');
-              addClass(this.$refs.input.$el.querySelector('input'), 'invalid');
+              addClass(this.getInputElement(), 'invalid');
               return false;
             }
             if (typeof validateResult === 'string') {
@@ -234,7 +239,7 @@
           }
         }
         this.editorErrorMessage = '';
-        removeClass(this.$refs.input.$el.querySelector('input'), 'invalid');
+        removeClass(this.getInputElement(), 'invalid');
         return true;
       },
       getFistFocus() {
@@ -272,13 +277,13 @@
         if (this.$type !== 'prompt') return;
         if (val) {
           setTimeout(() => {
-            if (this.$refs.input && this.$refs.input.$el) {
-              this.$refs.input.$el.querySelector('input').focus();
+            if (this.$refs.input) {
+              this.$refs.input.focus();
             }
           }, 500);
         } else {
           this.editorErrorMessage = '';
-          removeClass(this.$refs.input.$el.querySelector('input'), 'invalid');
+          removeClass(this.getInputElement(), 'invalid');
         }
       }
     },
