@@ -40,6 +40,7 @@
       @keydown.down.native.prevent="decrease"
       @blur="handleBlur"
       @focus="handleFocus"
+      @input="handleInput"
       @change="handleInputChange"
     >
       <template slot="prepend" v-if="$slots.prepend">
@@ -190,7 +191,7 @@
       handleFocus(event) {
         this.$emit('focus', event);
       },
-      setCurrentValue(newVal) {
+      setCurrentValue(newVal, emitChange = true) {
         const oldVal = this.currentValue;
         if (newVal >= this.max) newVal = this.max;
         if (newVal <= this.min) newVal = this.min;
@@ -198,12 +199,20 @@
           this.$refs.input.setCurrentValue(this.currentValue);
           return;
         }
-        this.$emit('change', newVal, oldVal);
+        if (emitChange) {
+          this.$emit('change', newVal, oldVal);
+        }
         this.$emit('input', newVal);
         this.currentValue = newVal;
       },
+      handleInput(value) {
+        const newVal = Number(value);
+        if (!/\.0*$/.test(value) && (!isNaN(newVal) || value === '')) {
+          this.setCurrentValue(newVal, false);
+        }
+      },
       handleInputChange(value) {
-        const newVal = value === '' ? undefined : Number(value);
+        const newVal = Number(value);
         if (!isNaN(newVal) || value === '') {
           this.setCurrentValue(newVal);
         }
