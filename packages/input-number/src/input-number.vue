@@ -39,6 +39,7 @@
       @keydown.down.native.prevent="decrease"
       @blur="handleBlur"
       @focus="handleFocus"
+      @input="handleInput"
       @change="handleInputChange">
       <template slot="prepend" v-if="$slots.prepend">
         <slot name="prepend"></slot>
@@ -196,9 +197,19 @@
           this.$refs.input.setCurrentValue(this.currentValue);
           return;
         }
-        this.$emit('change', newVal, oldVal);
         this.$emit('input', newVal);
+        this.$emit('change', newVal, oldVal);
         this.currentValue = newVal;
+      },
+      handleInput(value) {
+        // emit value is "safe" (won't cause currentValue being changed)
+        const newVal = value === '' ? undefined : Number(value);
+        if (!isNaN(newVal) || value === '') {
+          if (String(Number(value)) === value) {
+            console.log('safe-to-emi');
+            this.setCurrentValue(newVal);
+          }
+        }
       },
       handleInputChange(value) {
         const newVal = value === '' ? undefined : Number(value);
