@@ -61,9 +61,8 @@
         @compositionstart="handleComposition"
         @compositionupdate="handleComposition"
         @compositionend="handleComposition"
-        v-model="query"
-        @input="e => handleQueryChange(e.target.value)"
-        :debounce="remote ? 300 : 0"
+        :value="query"
+        @input="e => { query = e.target.value; debouncedOnInputChange() }"
         v-if="filterable"
         :style="{ width: inputLength + 'px', 'max-width': inputWidth - 42 + 'px' }"
         ref="input">
